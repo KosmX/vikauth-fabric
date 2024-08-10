@@ -1,11 +1,13 @@
 plugins {
 	id("fabric-loom") version "1.7-SNAPSHOT"
-	kotlin("jvm") version "2.0.0"
+	kotlin("jvm") version "2.0.10"
+	kotlin("plugin.serialization") version "2.0.10"
 	id("maven-publish")
+	id("com.github.johnrengelman.shadow") version "8.+"
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_21
-java.targetCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 base.archivesName.set(project.properties["archives_base_name"] as String)
 version = project.properties["mod_version"] as String
@@ -30,11 +32,21 @@ loom {
 	}
 }
 
+configurations {
+	val compileModule by creating {}
+
+	implementation {
+		extendsFrom(compileModule)
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft("com.mojang:minecraft:${project.properties["minecraft_version"]}")
 	mappings("net.fabricmc:yarn:${project.properties["yarn_mappings"]}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${project.properties["loader_version"]}")
+
+	"compileModule"("com.macasaet.fernet:fernet-java8:1.4.+")
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.properties["fabric_version"]}")
@@ -66,6 +78,17 @@ tasks {
 		from("LICENSE") {
 			rename { "${it}_${base.archivesName.get()}" }
 		}
+	}
+
+	shadowJar {
+		dependsOn(jar)
+		configurations = listOf(project.configurations["compileModule"])
+		archiveClassifier = "dev-shadow"
+	}
+
+	remapJar {
+		dependsOn(shadowJar)
+		inputFile = shadowJar.get().archiveFile
 	}
 }
 

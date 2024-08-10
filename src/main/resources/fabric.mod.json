@@ -1,48 +1,31 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "vikauth-fabric",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Vikauth for Fabric",
+	"description": ":3",
 	"authors": [
-		"Me!"
+		"Cynthia",
+		"Lili"
 	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "WTFPL",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			{
 				"adapter": "kotlin",
-				"value": "com.example.ExampleMod"
-			}
-		],
-		"client": [
-			{
-				"adapter": "kotlin",
-				"value": "com.example.ExampleModClient"
+				"value": "dev.kosmx.vikauthfabric.Main"
 			}
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
-		{
-			"config": "modid.client.mixins.json",
-			"environment": "client"
-		}
+      "vikauth-fabric.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.21",
-		"java": ">=21",
+		"minecraft": "*",
+		"java": ">=17",
 		"fabric-api": "*",
 		"fabric-language-kotlin": ">=1.11.0+kotlin.2.0.0"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
